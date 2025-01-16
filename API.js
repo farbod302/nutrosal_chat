@@ -157,7 +157,7 @@ const API = {
         }
     },
 
-    async get_all_conversations() {
+    async get_all_conversations(req,res) {
         try {
             const conversations = await API.server_request("GET", `conversations`);
             res.json(conversations);
