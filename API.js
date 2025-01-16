@@ -156,6 +156,18 @@ const API = {
         }
     },
 
+    async get_all_conversations() {
+        try {
+            const conversations = await API.server_request("GET", `conversations`);
+            res.json(conversations);
+        } catch (err) {
+            console.error("Error in get_all_conversations:", err.message);
+            res.json({ status: false, msg: err.message });
+        }
+
+
+    },
+
     async get_user_conversation(req, res) {
         try {
             const { user_id } = req.body;
