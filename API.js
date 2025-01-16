@@ -62,6 +62,7 @@ const API = {
         app.post("/chat/getUnreadMessagesAdmin", this.get_admin_unread_messages);
         app.post("/chat/addMultiUserToGroup", this.addMultiUserToGroup);
         app.post("/chat/deleteMultiUserFromGroup", this.deleteMultiUserFromGroup);
+        app.get("/chat/getAllConversations", this.get_all_conversations);
     },
 
     async create_group(req, res) {
