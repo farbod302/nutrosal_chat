@@ -64,6 +64,7 @@ const API = {
         app.post("/chat/deleteMultiUserFromGroup", this.deleteMultiUserFromGroup);
         app.get("/chat/getAllConversations", this.get_all_conversations);
         app.post("/chat/deleteConversation", this.delete_conversation);
+        app.get("/chat/getAllUsers", this.delete_conversation);
     },
 
     async create_group(req, res) {
@@ -122,6 +123,11 @@ const API = {
             console.error("Error in delete_user:", err.message);
             res.json({ status: false, msg: err.message });
         }
+    },
+
+    async get_all_users(req, res) {
+        const result = await API.server_request("GET", `users?limit=100`, body);
+        res.json(result)
     },
 
     async delete_conversation(req, res) {
