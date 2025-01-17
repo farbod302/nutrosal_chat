@@ -126,7 +126,7 @@ const API = {
     },
 
     async get_all_users(req, res) {
-        const result = await API.server_request("GET", `users?limit=100`, body);
+        const result = await API.server_request("GET", `users?limit=100`);
         res.json(result)
     },
 
