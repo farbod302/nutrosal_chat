@@ -73,8 +73,8 @@ const API = {
                 res.json({ status: false, msg: "Bad request" });
                 return;
             }
-            const participants=["1"]
-            if(admin_id){
+            const participants = ["1"]
+            if (admin_id) {
                 participants.push(`${admin_id}`)
             }
             const groupData = {
@@ -173,7 +173,7 @@ const API = {
 
     async get_all_conversations(req, res) {
         try {
-            const conversations = await API.server_request("GET", `conversations?limit=100`);
+            const conversations = await API.server_request("GET", `conversations`);
             res.json(conversations);
         } catch (err) {
             console.error("Error in get_all_conversations:", err.message);
@@ -185,8 +185,17 @@ const API = {
 
     async get_user_conversation(req, res) {
         try {
+            let temp = []
+            let all_conversations = []
             const { user_id } = req.body;
             const conversation = await API.server_request("GET", `users/${user_id}/conversations`);
+            temp = conversation
+            all_conversations = conversation
+            while (temp.length) {
+                const conversation = await API.server_request("GET", `users/${user_id}/conversations?startingAfter=${temp.at(-1)?.id}`);
+                temp = conversation
+                all_conversations = all_conversations.concat(conversation)
+            }
             if (res) res.json(conversation);
             return conversation
         } catch (err) {
