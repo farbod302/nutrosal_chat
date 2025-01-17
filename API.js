@@ -73,8 +73,12 @@ const API = {
                 res.json({ status: false, msg: "Bad request" });
                 return;
             }
+            const participants=["1"]
+            if(admin_id){
+                participants.push(`${admin_id}`)
+            }
             const groupData = {
-                participants: ["1"].push(`${admin_id}`),
+                participants,
                 subject: name,
                 welcomeMessages: null,
                 photoUrl: "https://style.nutrosal.com/logo.png",
@@ -169,7 +173,7 @@ const API = {
 
     async get_all_conversations(req, res) {
         try {
-            const conversations = await API.server_request("GET", `conversations`);
+            const conversations = await API.server_request("GET", `conversations?limit=100`);
             res.json(conversations);
         } catch (err) {
             console.error("Error in get_all_conversations:", err.message);
