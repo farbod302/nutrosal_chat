@@ -64,7 +64,7 @@ const API = {
         app.post("/chat/deleteMultiUserFromGroup", this.deleteMultiUserFromGroup);
         app.get("/chat/getAllConversations", this.get_all_conversations);
         app.post("/chat/deleteConversation", this.delete_conversation);
-        app.get("/chat/getAllUsers", this.delete_conversation);
+        app.get("/chat/getAllUsers", this.get_all_users);
     },
 
     async create_group(req, res) {
