@@ -13,5 +13,9 @@ const conf = {
     cert: fs.readFileSync("/etc/letsencrypt/live/nutrostyle.nutrosal.com/fullchain.pem")
 }
 api.init(app)
-const server=https.createServer(conf,app)
+
+app.post("/chat/webhook*", (req, res) => {
+    console.log(req.body);
+})
+const server = https.createServer(conf, app)
 server.listen(4015, () => { console.log("server run on port 4015") })
