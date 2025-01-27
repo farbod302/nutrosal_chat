@@ -7,6 +7,7 @@ app.use(cors())
 const bodyParser = require("body-parser")
 app.use(bodyParser.json())
 const api = require("./API")
+const { default: axios } = require("axios")
 
 const conf = {
     key: fs.readFileSync("/etc/letsencrypt/live/nutrostyle.nutrosal.com/privkey.pem"),
@@ -21,12 +22,30 @@ app.post("/chat/webhook*", (req, res) => {
         body: `${sender.name}: ${messages[0]?.text}`
     }
     const { pushTokens } = recipient
-    const keys=Object.keys(recipient.pushTokens)
-    console.log({keys});
-    const expo_tokens=keys.filter(e=>e.indexOf("ExpoPush") > -1)
-    console.log(expo_tokens);
-    // const selected_token=expo_tokens.at(-1)
+    const keys = Object.keys(pushTokens)
+    const expo_tokens = keys.filter(e => e.indexOf("ExponentPushToken") > -1)
+    if (!expo_tokens.length) return
+    const selected_token = expo_tokens.at(-1)
+    const final_token = selected_token.replace("fcm:", "")
+    send_notification(final_token, new_notification.title, new_notification.body)
 
 })
 const server = https.createServer(conf, app)
 server.listen(4015, () => { console.log("server run on port 4015") })
+
+
+
+const send_notification = (notification_token, title, body) => {
+    if (!notification_token || !notification_token.startsWith("ExponentPushToken")) return null
+    const notif = {
+        body,
+        title,
+        sound: "default",
+        to: notification_token,
+        data: {
+            redirect: "/chat"
+        }
+    }
+    axios.post("https://api.expo.dev/v2/push/send", [notif])
+
+}
