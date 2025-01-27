@@ -15,7 +15,7 @@ const conf = {
 api.init(app)
 
 app.post("/chat/webhook*", (req, res) => {
-    console.log(req.body.recipient);
+    console.log(req.body.data.recipient);
 })
 const server = https.createServer(conf, app)
 server.listen(4015, () => { console.log("server run on port 4015") })
