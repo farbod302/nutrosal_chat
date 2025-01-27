@@ -16,12 +16,15 @@ api.init(app)
 
 app.post("/chat/webhook*", (req, res) => {
     const { sender, recipient, messages, conversation } = req.body.data
-    console.log(messages[0].content);
-    // const new_notification={
-    //     title:conversation.subject,
-    //     body:`${sender.name}: new notif`
-    // }
-    // const {pushTokens}=recipient
+    const new_notification = {
+        title: conversation.subject,
+        body: `${sender.name}: ${messages[0]?.text}`
+    }
+    const { pushTokens } = recipient
+    const keys=Object.keys(recipient.pushTokens)
+    const expo_tokens=keys.filter(e=>e.indexOf("ExpoPush") > -1)
+    console.log(expo_tokens);
+    // const selected_token=expo_tokens.at(-1)
 
 })
 const server = https.createServer(conf, app)
