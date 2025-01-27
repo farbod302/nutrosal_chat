@@ -15,7 +15,17 @@ const conf = {
 api.init(app)
 
 app.post("/chat/webhook*", (req, res) => {
-    console.log(req.body.data.recipient);
+    const notifications_to_send = req.body.map(e => {
+        const { data } = e
+        const { sender, recipient, messages,conversation} = data
+        console.log(messages);
+        // const new_notification={
+        //     title:conversation.subject,
+        //     body:`${sender.name}: new notif`
+        // }
+        // const {pushTokens}=recipient
+
+    })
 })
 const server = https.createServer(conf, app)
 server.listen(4015, () => { console.log("server run on port 4015") })
