@@ -16,7 +16,7 @@ api.init(app)
 
 app.post("/chat/webhook*", (req, res) => {
     const { sender, recipient, messages, conversation } = req.body.data
-    console.log(messages.content);
+    console.log(messages[0].content);
     // const new_notification={
     //     title:conversation.subject,
     //     body:`${sender.name}: new notif`
