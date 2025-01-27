@@ -22,6 +22,7 @@ app.post("/chat/webhook*", (req, res) => {
     }
     const { pushTokens } = recipient
     const keys=Object.keys(recipient.pushTokens)
+    console.log({keys});
     const expo_tokens=keys.filter(e=>e.indexOf("ExpoPush") > -1)
     console.log(expo_tokens);
     // const selected_token=expo_tokens.at(-1)
