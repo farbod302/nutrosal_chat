@@ -22,6 +22,7 @@ app.post("/chat/webhook*", (req, res) => {
     const mention = messages[0]?.text.indexOf(`@${name}`) > -1
     const { content } = messages[0]
     let file = false
+    console.log(content);
     if (content[0].type === "file") {
         const { subtype } = content[0].subtype
         file = subtype
