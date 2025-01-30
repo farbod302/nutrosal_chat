@@ -36,7 +36,8 @@ app.post("/chat/webhook*", (req, res) => {
     if (!expo_tokens.length) return
     const selected_token = expo_tokens.at(-1)
     const final_token = selected_token.replace("fcm:", "")
-    send_notification(final_token, new_notification.title, new_notification.body)
+    console.log(messages[0]?.conversationId);
+    send_notification(final_token, new_notification.title, new_notification.body,messages[0]?.conversationId)
 
 })
 const server = https.createServer(conf, app)
@@ -44,7 +45,7 @@ server.listen(4015, () => { console.log("server run on port 4015") })
 
 
 
-const send_notification = (notification_token, title, body) => {
+const send_notification = (notification_token, title, body,group_id) => {
     if (!notification_token || !notification_token.startsWith("ExponentPushToken")) return null
     const notif = {
         body,
@@ -52,7 +53,7 @@ const send_notification = (notification_token, title, body) => {
         sound: "default",
         to: notification_token,
         data: {
-            redirect: "/chat"
+            redirect: "/chat/"+`${group_id || ""}`
         }
     }
     axios.post("https://api.expo.dev/v2/push/send", [notif])
