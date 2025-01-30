@@ -21,10 +21,14 @@ app.post("/chat/webhook*", (req, res) => {
 
     const mention = messages[0]?.text.indexOf(`@${name}`) > -1
     const { content } = messages[0]
-    console.log(content);
+    let file = false
+    if (content[0].type === "file") {
+        const { subtype } = content[0].subtype
+        file = subtype
+    }
     const new_notification = {
         title: conversation.subject,
-        body: `${sender.name} ${mention ? "Mention you" : ""}: ${content[0]?.type === "text"? (messages[0]?.text) || "New message" : content[0]?.type}`
+        body: `${sender.name} ${mention ? "Mention you" : ""}: ${!file ? (messages[0]?.text) || "New message" : `New ${file}`}`
     }
     const { pushTokens } = recipient
     const keys = Object.keys(pushTokens)
