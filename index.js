@@ -19,8 +19,9 @@ app.post("/chat/webhook*", (req, res) => {
     const { sender, recipient, messages, conversation } = req.body.data
     const new_notification = {
         title: conversation.subject,
-        body: `${sender.name}: ${messages[0]?.text}`
+        body: `${sender.name}: ${(messages[0]?.text) || "New message"}`
     }
+    console.log(messages[0],recipient);
     const { pushTokens } = recipient
     const keys = Object.keys(pushTokens)
     const expo_tokens = keys.filter(e => e.indexOf("ExponentPushToken") > -1)
