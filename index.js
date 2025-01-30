@@ -21,7 +21,7 @@ app.post("/chat/webhook*", (req, res) => {
 
     const mention = messages[0]?.text.indexOf(`@${name}`) > -1
     const { content } = messages[0]
-    console.log(content[0].children);
+    console.log(content);
     const new_notification = {
         title: conversation.subject,
         body: `${sender.name} ${mention ? "Mention you" : ""}: ${content[0]?.type === "text"? (messages[0]?.text) || "New message" : content[0]?.type}`
