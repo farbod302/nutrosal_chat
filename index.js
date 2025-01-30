@@ -21,7 +21,9 @@ app.post("/chat/webhook*", (req, res) => {
         title: conversation.subject,
         body: `${sender.name}: ${(messages[0]?.text) || "New message"}`
     }
-    console.log(messages[0],recipient);
+    const { name } = recipient
+    const mention = messages[0]?.text.indexOf(`@${name}`) > -1
+    console.log({ content ,mention});
     const { pushTokens } = recipient
     const keys = Object.keys(pushTokens)
     const expo_tokens = keys.filter(e => e.indexOf("ExponentPushToken") > -1)
