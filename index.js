@@ -17,14 +17,14 @@ api.init(app)
 
 app.post("/chat/webhook*", (req, res) => {
     const { sender, recipient, messages, conversation } = req.body.data
-    const new_notification = {
-        title: conversation.subject,
-        body: `${sender.name}: ${(messages[0]?.text) || "New message"}`
-    }
-    const { name } = recipient
     const mention = messages[0]?.text.indexOf(`@${name}`) > -1
     const { content } = messages[0]
-    console.log({ content, mention });
+
+    const new_notification = {
+        title: conversation.subject,
+        body: `${sender.name} ${mention ? "Mention you" : ""}: ${content[0]?.type === "text"? (messages[0]?.text) || "New message" : content[0]?.type}`
+    }
+    const { name } = recipient
     const { pushTokens } = recipient
     const keys = Object.keys(pushTokens)
     const expo_tokens = keys.filter(e => e.indexOf("ExponentPushToken") > -1)
