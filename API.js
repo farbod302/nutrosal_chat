@@ -132,7 +132,6 @@ const API = {
         const {data}=conversation
         temp = data
         all_users = data
-        console.log(temp.at(-1));
         while (temp.length) {
             const {data:conversation} = await API.server_request("GET", `users?limit=100&startingAfter=${temp.at(-1)?.id}`);
             temp = conversation.data
