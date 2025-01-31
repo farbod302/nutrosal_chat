@@ -128,14 +128,15 @@ const API = {
     async get_all_users(req, res) {
         let temp = []
         let all_users = []
-        const conversation = await API.server_request("GET", `users?limit=100`);
-        temp = conversation
-        all_users = conversation
-        console.log(conversation);
+        let {data:conversation} = await API.server_request("GET", `users?limit=100`);
+        const {data}=conversation
+        temp = data
+        all_users = data
+        console.log(temp.at(-1));
         while (temp.length) {
-            const conversation = await API.server_request("GET", `users?limit=100&startingAfter=${temp.at(-1)?.id}`);
-            temp = conversation
-            all_users = all_users.concat(conversation)
+            const {data:conversation} = await API.server_request("GET", `users?limit=100&startingAfter=${temp.at(-1)?.id}`);
+            temp = conversation.data
+            all_users = all_users.concat(conversation.data)
         }
         res.json(all_users)
     },
