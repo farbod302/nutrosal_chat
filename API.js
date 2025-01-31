@@ -126,8 +126,17 @@ const API = {
     },
 
     async get_all_users(req, res) {
-        const result = await API.server_request("GET", `users?limit=100`);
-        res.json(result)
+        let temp = []
+        let all_users = []
+        const conversation = await API.server_request("GET", `users?limit=100`);
+        temp = conversation
+        all_users = conversation
+        while (temp.length) {
+            const conversation = await API.server_request("GET", `users?limit=100&startingAfter=${temp.at(-1)?.id}`);
+            temp = conversation
+            all_users = all_users.concat(conversation)
+        }
+        res.json(all_users)
     },
 
     async delete_conversation(req, res) {
