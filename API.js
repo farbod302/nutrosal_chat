@@ -131,8 +131,8 @@ const API = {
         const conversation = await API.server_request("GET", `users?limit=100`);
         temp = conversation
         all_users = conversation
+        console.log(conversation);
         while (temp.length) {
-            console.log(temp.at(-1));
             const conversation = await API.server_request("GET", `users?limit=100&startingAfter=${temp.at(-1)?.id}`);
             temp = conversation
             all_users = all_users.concat(conversation)
