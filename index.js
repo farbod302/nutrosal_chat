@@ -34,9 +34,8 @@ app.post("/chat/webhook*", (req, res) => {
     const keys = Object.keys(pushTokens)
     const expo_tokens = keys.filter(e => e.indexOf("ExponentPushToken") > -1)
     if (!expo_tokens.length) return
-    const selected_token = expo_tokens.at(-1)
+    const selected_token = expo_tokens.at(0)
     const final_token = selected_token.replace("fcm:", "")
-    console.log(messages[0]?.conversationId);
     send_notification(final_token, new_notification.title, new_notification.body,messages[0]?.conversationId)
 
 })
