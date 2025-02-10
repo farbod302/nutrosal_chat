@@ -18,7 +18,7 @@ api.init(app)
 app.post("/chat/webhook*", (req, res) => {
     const { sender, recipient, messages, conversation } = req.body.data
     const { name } = recipient
-    const {id}=messages
+    const {id}=messages[0]
     const {id:user_id}=recipient
     console.log({id,user_id});
     const mention = messages[0]?.text.indexOf(`@${name}`) > -1
