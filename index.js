@@ -15,12 +15,15 @@ const conf = {
 }
 api.init(app)
 
+const messages_history = {}
+
 app.post("/chat/webhook*", (req, res) => {
     const { sender, recipient, messages, conversation } = req.body.data
     const { name } = recipient
-    const {id}=messages[0]
-    const {id:user_id}=recipient
-    console.log({id,user_id});
+    const { id } = messages[0]
+    const { id: user_id } = recipient
+    if (messages_history[user_id] && messages_history[user_id] === id) return
+    messages_history[user_id] = id
     const mention = messages[0]?.text.indexOf(`@${name}`) > -1
     const { content } = messages[0]
     let file = false
@@ -38,7 +41,7 @@ app.post("/chat/webhook*", (req, res) => {
     if (!expo_tokens.length) return
     const selected_token = expo_tokens.at(0)
     const final_token = selected_token.replace("fcm:", "")
-    send_notification(final_token, new_notification.title, new_notification.body,messages[0]?.conversationId)
+    send_notification(final_token, new_notification.title, new_notification.body, messages[0]?.conversationId)
 
 })
 const server = https.createServer(conf, app)
@@ -46,7 +49,7 @@ server.listen(4015, () => { console.log("server run on port 4015") })
 
 
 
-const send_notification = (notification_token, title, body,group_id) => {
+const send_notification = (notification_token, title, body, group_id) => {
     if (!notification_token || !notification_token.startsWith("ExponentPushToken")) return null
     const notif = {
         body,
@@ -54,7 +57,7 @@ const send_notification = (notification_token, title, body,group_id) => {
         sound: "default",
         to: notification_token,
         data: {
-            redirect: "/chat/"+`${group_id || ""}`
+            redirect: "/chat/" + `${group_id || ""}`
         }
     }
     axios.post("https://api.expo.dev/v2/push/send", [notif])
