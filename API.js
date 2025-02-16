@@ -66,7 +66,7 @@ const API = {
         app.post("/chat/deleteConversation", this.delete_conversation);
         app.get("/chat/getAllUsers", this.get_all_users);
         app.post("/chat/getLastMessage", this.get_last_message);
-        app.get("/chat/getMessageInfo/:message_id", this.get_message_info);
+        app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
     },
 
     async create_group(req, res) {
@@ -346,7 +346,7 @@ const API = {
         res.json({ message_id: message?.id || null })
     },
     async get_message_info(req,res){
-        const {message_id}=req.params
+        const {message_id,group_id}=req.params
         const result = await API.server_request("GET", `conversations/${group_id}/messages/${message_id}`)
         res.json(result.data)
 
