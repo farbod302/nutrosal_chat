@@ -65,6 +65,7 @@ const API = {
         app.get("/chat/getAllConversations", this.get_all_conversations);
         app.post("/chat/deleteConversation", this.delete_conversation);
         app.get("/chat/getAllUsers", this.get_all_users);
+        app.post("/chat/getLastMessage", this.get_last_message);
     },
 
     async create_group(req, res) {
@@ -128,12 +129,12 @@ const API = {
     async get_all_users(req, res) {
         let temp = []
         let all_users = []
-        let {data:conversation} = await API.server_request("GET", `users?limit=100`);
-        const {data}=conversation
+        let { data: conversation } = await API.server_request("GET", `users?limit=100`);
+        const { data } = conversation
         temp = data
         all_users = data
         while (temp.length) {
-            const {data:conversation} = await API.server_request("GET", `users?limit=100&startingAfter=${temp.at(-1)?.id}`);
+            const { data: conversation } = await API.server_request("GET", `users?limit=100&startingAfter=${temp.at(-1)?.id}`);
             temp = conversation.data
             all_users = all_users.concat(conversation.data)
         }
@@ -336,6 +337,12 @@ const API = {
             console.log(err);
             res.json({ status: false, msg: "", data: {} })
         }
+    },
+    async get_last_message(req, res) {
+        const { user_id, group_id } = req.body
+        const data = await API.server_request("GET", `conversations/${group_id}/messages?limit=100`)
+        console.log(data);
+        res.json(data)
     }
 };
 
