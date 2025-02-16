@@ -340,9 +340,9 @@ const API = {
     },
     async get_last_message(req, res) {
         const { user_id, group_id } = req.body
-        const data = await API.server_request("GET", `conversations/${group_id}/messages?limit=100`)
-        console.log(data);
-        res.json(data)
+        const result = await API.server_request("GET", `conversations/${group_id}/messages?limit=100`)
+        const message_id = result.data.data.find(e => !e.readBy.includes(`${user_id}`))
+        res.json(message_id)
     }
 };
 
