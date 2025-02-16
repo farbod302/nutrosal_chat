@@ -341,8 +341,8 @@ const API = {
     async get_last_message(req, res) {
         const { user_id, group_id } = req.body
         const result = await API.server_request("GET", `conversations/${group_id}/messages?limit=100`)
-        const message_id = result.data.data.reverse().find(e => !e.readBy.includes(`${user_id}`) && e.senderId !== `${user_id}`)
-        res.json(message_id)
+        const message = result.data.data.reverse().find(e => !e.readBy.includes(`${user_id}`) && e.senderId !== `${user_id}`)
+        res.json({ message_id: message?.id || null })
     }
 };
 
