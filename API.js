@@ -361,7 +361,6 @@ const API = {
         const data = {
             "text": text,
             "type": "SystemMessage",
-            "sender": "System"
         }
         if (image) {
             data.attachmentToken = image
