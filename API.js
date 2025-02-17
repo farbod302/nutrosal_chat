@@ -1,5 +1,6 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
+const multer=require("multer")
 
 const API = {
     async init(app) {
@@ -68,6 +69,7 @@ const API = {
         app.post("/chat/getLastMessage", this.get_last_message);
         app.post("/chat/sendSystemMessage", this.send_system_message);
         app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
+        app.post("/chat/upload", this.upload_file);
     },
 
     async create_group(req, res) {
@@ -357,13 +359,10 @@ const API = {
         const data = {
             "text": text,
             "type": "SystemMessage",
-            "sender":"System"
+            "sender": "System"
         }
         if (image) {
-            data.attachment = {
-                "url": image,
-                "name": `${Date.now()}.jpeg`
-            }
+            data.attachmentToken = image
         }
         if (custom) {
             data.custom = custom
@@ -371,6 +370,9 @@ const API = {
         console.log(data);
         API.server_request("POST", `/conversations/${group_id}/messages`, [data])
         res.json(true)
+    },
+    upload_file(req,res) {
+        console.log(req.files);
     }
 }
 
