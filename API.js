@@ -66,6 +66,7 @@ const API = {
         app.post("/chat/deleteConversation", this.delete_conversation);
         app.get("/chat/getAllUsers", this.get_all_users);
         app.post("/chat/getLastMessage", this.get_last_message);
+        app.post("/chat/sendSystemMessage", this.send_system_message);
         app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
     },
 
@@ -345,12 +346,30 @@ const API = {
         const message = result.data.data.reverse().find(e => !e.readBy.includes(`${user_id}`) && e.senderId !== `${user_id}`)
         res.json({ message_id: message?.id || null })
     },
-    async get_message_info(req,res){
-        const {message_id,group_id}=req.params
+    async get_message_info(req, res) {
+        const { message_id, group_id } = req.params
         const result = await API.server_request("GET", `conversations/${group_id}/messages/${message_id}`)
         res.json(result.data)
 
+    },
+    async send_system_message(req, res) {
+        const { text, image, group_id, custom } = req.body
+        const data = {
+            "text": text,
+            "type": "SystemMessage",
+        }
+        if (image) {
+            data.attachment = {
+                "url": image,
+                "name": `${Date.now()}.jpeg`
+            }
+        }
+        if (custom) {
+            data.custom = custom
+        }
+        API.server_request("POST", `/conversations/${group_id}/messages`, data)
+        res.json(true)
     }
-};
+}
 
 module.exports = API;
