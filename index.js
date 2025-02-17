@@ -2,10 +2,13 @@ const express = require("express")
 const cors = require("cors")
 const https = require("https")
 const fs = require("fs")
+const multer = require("multer")
+
 const app = express()
 app.use(cors())
 const bodyParser = require("body-parser")
 app.use(bodyParser.json())
+app.use(multer({ dest: './uploads/' }).single("file"))
 const api = require("./API")
 const { default: axios } = require("axios")
 

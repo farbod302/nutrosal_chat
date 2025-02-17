@@ -1,6 +1,5 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-const multer=require("multer")
 
 const API = {
     async init(app) {
