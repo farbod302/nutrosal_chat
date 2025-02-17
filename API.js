@@ -34,7 +34,7 @@ const API = {
                 }
             } catch (error) {
                 console.error(`Error in ${method.toUpperCase()} ${path}:`, error.message);
-                console.log(error);
+                console.log(error.data);
                 throw new Error("failed")
             }
         };
