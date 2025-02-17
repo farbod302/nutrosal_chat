@@ -382,7 +382,7 @@ const API = {
         const file_to_send = new File([file_self], file.originalname)
         form_data.append("file", file_to_send)
         form_data.append("filename", file.originalname)
-        const response = await API.server_request(`/files`, form_data)
+        const response = await API.server_request("POST",`/files`, form_data)
         console.log(response);
     }
 }
