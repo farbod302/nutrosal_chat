@@ -11,6 +11,7 @@ const API = {
                 expiresIn: '59s',
             });
             console.log(encoded_jwt);
+            return null
             return encoded_jwt;
         };
 
