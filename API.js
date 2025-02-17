@@ -1,7 +1,7 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const multer = require("multer")
-
+const fs = require("fs")
 const API = {
     async init(app) {
         const SECRET_KEY = "sk_test_3ZFwRQymPI0By6H36LzO7PrdRmnuF0BZ";
@@ -69,7 +69,7 @@ const API = {
         app.post("/chat/getLastMessage", this.get_last_message);
         app.post("/chat/sendSystemMessage", this.send_system_message);
         app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
-        app.post("/chat/upload", multer({ dest: `${__dirname}/uploads` }).single("file"),this.upload_file);
+        app.post("/chat/upload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_file);
     },
 
     async create_group(req, res) {
@@ -371,8 +371,19 @@ const API = {
         API.server_request("POST", `/conversations/${group_id}/messages`, [data])
         res.json(true)
     },
-    upload_file(req,res) {
-        console.log(req.file);
+    async upload_file(req, res) {
+        const file = req.file
+        if (!file) {
+            res.json(false)
+            return
+        }
+        const form_data = new FormData()
+        const file_self = await fs.openAsBlob(file.path)
+        const file_to_send = new File([file_self], file.originalname)
+        form_data.append("file", file_to_send)
+        form_data.append("filename", file.originalname)
+        const response = await API.server_request(`/files`, form_data)
+        console.log(response);
     }
 }
 
