@@ -356,6 +356,7 @@ const API = {
     },
     async send_system_message(req, res) {
         const { text, image, group_id, custom } = req.body
+        console.log({image});
         const data = {
             "text": text,
             "type": "SystemMessage",
