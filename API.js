@@ -368,6 +368,7 @@ const API = {
         if (custom) {
             data.custom = custom
         }
+        console.log(data);
         API.server_request("POST", `/conversations/${group_id}/messages`, [data])
         res.json(true)
     }
