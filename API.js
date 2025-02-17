@@ -382,6 +382,7 @@ const API = {
         const form_data = new FormData()
         const file_self = await fs.openAsBlob(file.path)
         const file_to_send = new File([file_self], file.originalname)
+        console.log({file_to_send});
         form_data.append("file", file_to_send)
         form_data.append("filename", file.originalname)
         const response = await API.server_request("POST",`/files`, form_data)
