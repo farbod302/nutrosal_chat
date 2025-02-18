@@ -10,7 +10,6 @@ const API = {
                 issuer: 'thdsgPM5',
                 expiresIn: '59s',
             });
-            console.log(encoded_jwt);
             return encoded_jwt;
         };
 
