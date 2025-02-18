@@ -117,7 +117,7 @@ const API = {
             if (res) res.json({ status: false, msg: err.message });
         }
     },
-    async delete_user() {
+    async delete_user(req,res) {
         try {
             const { id } = req.body;
             const result = await API.server_request(
