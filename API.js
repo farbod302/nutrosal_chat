@@ -4,7 +4,7 @@ const multer = require("multer")
 const fs = require("fs")
 const API = {
     async init(app) {
-        const SECRET_KEY = "sk_test_3ZFwRQymPI0By6H36LzO7PrdRmnuF0BZ";
+        const SECRET_KEY = process.env.SECRET_KEY;
         const get_token = () => {
             const encoded_jwt = jwt.sign({ tokenType: 'app' }, SECRET_KEY, {
                 issuer: 'thdsgPM5',
@@ -358,19 +358,24 @@ const API = {
     },
     async send_system_message(req, res) {
         const { text, image, group_id, custom } = req.body
-        console.log({image});
-        const data = {
-            "text": text,
-            "type": "SystemMessage",
-        }
+        const body = []
         if (image) {
-            data.attachmentToken = image
+            body.push({
+                attachmentToken: image,
+                "type": "SystemMessage",
+            })
         }
-        if (custom) {
+        if (text) {
+            const data = {
+                "text": text,
+                "type": "SystemMessage",
+            }
             data.custom = custom
+            body.push(data)
         }
-        console.log(data);
-        API.server_request("POST", `/conversations/${group_id}/messages`, [data])
+
+
+        API.server_request("POST", `/conversations/${group_id}/messages`, body)
         res.json(true)
     },
     async upload_file(req, res) {
@@ -384,7 +389,7 @@ const API = {
         const file_to_send = new File([file_self], file.originalname)
         form_data.append("file", file_to_send)
         form_data.append("filename", file.originalname)
-        const response = await API.server_request("POST",`/files`, form_data)
+        const response = await API.server_request("POST", `/files`, form_data)
         res.json(response)
     }
 }
