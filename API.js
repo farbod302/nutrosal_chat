@@ -1,7 +1,10 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const multer = require("multer")
-const fs = require("fs")
+const { Worker } = require('worker_threads');
+
+const fs = require("fs");
+const { uid } = require("uid");
 const API = {
     async init(app) {
         const SECRET_KEY = process.env.SECRET_KEY;
@@ -415,7 +418,31 @@ const API = {
         form_data.append("filename", file.originalname)
         const response = await API.server_request("POST", `/files`, form_data)
         res.json(response)
+    },
+    async upload_video(req, res) {
+        const input = req.file
+        const id = uid(8)
+        const output_path = `${__dirname}/uploads/${id}.mp4`
+        const { path } = input
+        const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path } })
+        worker.on("message", async (msg) => {
+            const { status } = msg
+            if (status === "error") {
+                res.json({ status: false })
+                return
+            }
+            const form_data = new FormData()
+            const file_self = await fs.openAsBlob(output_path)
+            const file_to_send = new File([file_self], `${id}.mp4`, { type: "video/mp4" })
+            form_data.append("file", file_to_send)
+            form_data.append("filename", `${id}.mp4`)
+            const response = await API.server_request("POST", `/files`, form_data)
+            res.json(response)
+        })
+
+
     }
 }
+
 
 module.exports = API;

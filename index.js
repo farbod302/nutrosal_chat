@@ -8,6 +8,8 @@ const app = express()
 app.use(cors())
 const bodyParser = require("body-parser")
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ limit: "1024mb", extended: true }))
+
 const api = require("./API")
 const { default: axios } = require("axios")
 
