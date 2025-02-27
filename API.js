@@ -69,6 +69,7 @@ const API = {
         app.get("/chat/getAllUsers", this.get_all_users);
         app.post("/chat/getLastMessage", this.get_last_message);
         app.post("/chat/sendSystemMessage", this.send_system_message);
+        app.post("/chat/sendUserMessage", this.send_user_message);
         app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
         app.post("/chat/upload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_file);
     },
@@ -117,7 +118,7 @@ const API = {
             if (res) res.json({ status: false, msg: err.message });
         }
     },
-    async delete_user(req,res) {
+    async delete_user(req, res) {
         try {
             const { id } = req.body;
             const result = await API.server_request(
@@ -368,6 +369,30 @@ const API = {
             const data = {
                 "text": text,
                 "type": "SystemMessage",
+            }
+            data.custom = custom
+            body.push(data)
+        }
+
+
+        API.server_request("POST", `/conversations/${group_id}/messages`, body)
+        res.json(true)
+    },
+    async send_user_message(req, res) {
+        const { text, image, group_id, custom, id } = req.body
+        const body = []
+        if (image) {
+            body.push({
+                attachmentToken: image,
+                "type": "UserMessage",
+                sender: `${id}`
+            })
+        }
+        if (text) {
+            const data = {
+                "text": text,
+                "type": "UserMessage",
+                sender: `${id}`
             }
             data.custom = custom
             body.push(data)
