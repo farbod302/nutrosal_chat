@@ -75,6 +75,7 @@ const API = {
         app.post("/chat/sendUserMessage", this.send_user_message);
         app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
         app.post("/chat/upload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_file);
+        app.post("/chat/videoUpload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_video);
     },
 
     async create_group(req, res) {
