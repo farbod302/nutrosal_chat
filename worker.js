@@ -6,7 +6,7 @@ const fs = require('fs');
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 ffmpeg.setFfprobePath(ffprobeInstaller.path);
-function convertAndCompress(inputFilePath, outputFilePath) {
+function convertAndCompress(inputFilePath, outputFilePath, onProgress) {
     return new Promise((resolve, reject) => {
         ffmpeg(inputFilePath)
             .videoCodec('libx264')
@@ -18,6 +18,9 @@ function convertAndCompress(inputFilePath, outputFilePath) {
             })
             .on('error', (err) => {
                 reject(err);
+            })
+            .on("progress", (e) => {
+                onProgress(Math.floor(e.percent))
             })
             .save(outputFilePath);
     });

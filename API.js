@@ -76,6 +76,18 @@ const API = {
         app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
         app.post("/chat/upload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_file);
         app.post("/chat/videoUpload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_video);
+        app.post("/chat/getUploadProgress/:upload_id", this.get_progress);
+    },
+
+    progress: {},
+    setProgress(key, value) {
+        API.progress[key] = value
+    },
+    get_progress(req, res) {
+        const { upload_id } = req.params
+        const selected_upload = API.progress[upload_id]
+        if (!selected_upload) res.json(0)
+        res.json(selected_upload)
     },
 
     async create_group(req, res) {
@@ -423,9 +435,10 @@ const API = {
     async upload_video(req, res) {
         const input = req.file
         const id = uid(8)
+        const { upload_id } = req.body
         const output_path = `${__dirname}/uploads/${id}.mp4`
         const { path } = input
-        const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path } })
+        const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path, onProgress: (pr) => { API.setProgress(upload_id, pr) } } })
         worker.on("message", async (msg) => {
             const { status } = msg
             if (status === "error") {
