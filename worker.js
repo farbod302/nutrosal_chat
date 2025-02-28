@@ -13,7 +13,7 @@ function convertAndCompress(inputFilePath, outputFilePath, upload_id) {
             .videoCodec('libx264')
             .format('mp4')
             .outputOptions('-preset fast')
-            .outputOptions('-crf 35')
+            .outputOptions('-crf 40')
             .on('end', () => {
                 resolve(outputFilePath);
             })
