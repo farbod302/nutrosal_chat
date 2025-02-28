@@ -82,10 +82,11 @@ const API = {
 
     get_progress(req, res) {
         const { upload_id } = req.params
-        console.log({upload_id,progress});
-        const selected_upload = progress[upload_id]
-        if (!selected_upload) res.json(0)
-        else res.json(selected_upload)
+        const json_raw = fs.readFileSync("./progress.json")
+        const json_string = json_raw.toString()
+        const json = JSON.parse(json_string)
+        const selected = json[upload_id]
+        res.json(selected || 0)
     },
 
     async create_group(req, res) {

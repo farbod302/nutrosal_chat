@@ -21,8 +21,11 @@ function convertAndCompress(inputFilePath, outputFilePath, upload_id) {
                 reject(err);
             })
             .on("progress", (e) => {
-                console.log(e.percent);
-                progress[upload_id] = e.percent
+                const json_raw = fs.readFileSync("./progress.json")
+                const json_string = json_raw.toString()
+                const json = JSON.parse(json_string)
+                json[upload_id] = e.percent
+                fs.writeFileSync("./progress.json", JSON.stringify(json))
             })
             .save(outputFilePath);
     });
