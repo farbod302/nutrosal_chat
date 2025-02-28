@@ -77,7 +77,7 @@ const API = {
         app.get("/chat/getMessageInfo/:group_id/:message_id", this.get_message_info);
         app.post("/chat/upload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_file);
         app.post("/chat/videoUpload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_video);
-        app.post("/chat/getUploadProgress/:upload_id", this.get_progress);
+        app.get("/chat/getUploadProgress/:upload_id", this.get_progress);
     },
 
     get_progress(req, res) {
