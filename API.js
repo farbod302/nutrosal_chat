@@ -85,7 +85,7 @@ const API = {
         console.log({upload_id,progress});
         const selected_upload = progress[upload_id]
         if (!selected_upload) res.json(0)
-        res.json(selected_upload)
+        else res.json(selected_upload)
     },
 
     async create_group(req, res) {
