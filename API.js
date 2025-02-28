@@ -5,6 +5,7 @@ const { Worker } = require('worker_threads');
 
 const fs = require("fs");
 const { uid } = require("uid");
+const progress = require("./progress");
 const API = {
     async init(app) {
         const SECRET_KEY = process.env.SECRET_KEY;
@@ -79,13 +80,9 @@ const API = {
         app.post("/chat/getUploadProgress/:upload_id", this.get_progress);
     },
 
-    progress: {},
-    setProgress(key, value) {
-        API.progress[key] = value
-    },
     get_progress(req, res) {
         const { upload_id } = req.params
-        const selected_upload = API.progress[upload_id]
+        const selected_upload = progress[upload_id]
         if (!selected_upload) res.json(0)
         res.json(selected_upload)
     },
@@ -438,7 +435,7 @@ const API = {
         const { upload_id } = req.body
         const output_path = `${__dirname}/uploads/${id}.mp4`
         const { path } = input
-        const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path, onProgress: function (pr) { API.setProgress(upload_id, pr) } } })
+        const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path, upload_id } })
         worker.on("message", async (msg) => {
             const { status } = msg
             if (status === "error") {

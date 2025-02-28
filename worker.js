@@ -3,10 +3,11 @@ const ffmpeg = require('fluent-ffmpeg');
 const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
 const ffprobeInstaller = require('@ffprobe-installer/ffprobe');
 const fs = require('fs');
+const progress = require('./progress');
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 ffmpeg.setFfprobePath(ffprobeInstaller.path);
-function convertAndCompress(inputFilePath, outputFilePath, onProgress) {
+function convertAndCompress(inputFilePath, outputFilePath, upload_id) {
     return new Promise((resolve, reject) => {
         ffmpeg(inputFilePath)
             .videoCodec('libx264')
@@ -20,7 +21,7 @@ function convertAndCompress(inputFilePath, outputFilePath, onProgress) {
                 reject(err);
             })
             .on("progress", (e) => {
-                onProgress(Math.floor(e.percent))
+                progress[upload_id] = e.percent
             })
             .save(outputFilePath);
     });
