@@ -438,7 +438,7 @@ const API = {
         const { upload_id } = req.body
         const output_path = `${__dirname}/uploads/${id}.mp4`
         const { path } = input
-        const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path, onProgress: (pr) => { API.setProgress(upload_id, pr) } } })
+        const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path, onProgress: function (pr) { API.setProgress(upload_id, pr) } } })
         worker.on("message", async (msg) => {
             const { status } = msg
             if (status === "error") {
