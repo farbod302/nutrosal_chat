@@ -25,6 +25,7 @@ function convertAndCompress(inputFilePath, outputFilePath, upload_id) {
                 const json_string = json_raw.toString()
                 const json = JSON.parse(json_string)
                 json[upload_id] = e.percent
+                console.log({ json, percent: e.percent });
                 fs.writeFileSync("./progress.json", JSON.stringify(json))
             })
             .save(outputFilePath);

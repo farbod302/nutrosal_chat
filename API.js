@@ -85,6 +85,7 @@ const API = {
         const json_raw = fs.readFileSync("./progress.json")
         const json_string = json_raw.toString()
         const json = JSON.parse(json_string)
+        console.log({ json, upload_id });
         const selected = json[upload_id]
         res.json(selected || 0)
     },
