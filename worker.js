@@ -34,7 +34,7 @@ function convertAndCompress(inputFilePath, outputFilePath, upload_id) {
 
 (async () => {
     try {
-        await convertAndCompress(workerData.inputFilePath, workerData.outputFilePath, workerData.id);
+        await convertAndCompress(workerData.inputFilePath, workerData.outputFilePath, workerData.upload_id);
         parentPort.postMessage({ status: 'done', outputFilePath: workerData.outputFilePath });
     } catch (err) {
         parentPort.postMessage({ status: 'error', message: err.message });
