@@ -82,6 +82,7 @@ const API = {
 
     get_progress(req, res) {
         const { upload_id } = req.params
+        console.log({upload_id,progress});
         const selected_upload = progress[upload_id]
         if (!selected_upload) res.json(0)
         res.json(selected_upload)

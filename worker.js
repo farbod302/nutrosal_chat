@@ -21,6 +21,7 @@ function convertAndCompress(inputFilePath, outputFilePath, upload_id) {
                 reject(err);
             })
             .on("progress", (e) => {
+                console.log(e.percent);
                 progress[upload_id] = e.percent
             })
             .save(outputFilePath);
