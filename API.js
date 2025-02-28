@@ -436,6 +436,7 @@ const API = {
         const input = req.file
         const id = uid(8)
         const { upload_id } = req.body
+        console.log({upload_id});
         const output_path = `${__dirname}/uploads/${id}.mp4`
         const { path } = input
         const worker = new Worker("./worker.js", { workerData: { inputFilePath: path, outputFilePath: output_path, upload_id } })
