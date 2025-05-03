@@ -36,7 +36,9 @@ app.post("/chat/webhook*", (req, res) => {
         const { subtype } = content[0]
         file = subtype
     }
-    console.log({conversation});
+    const {participants}=conversation
+    const selected_user=participants[user_id]
+    console.log({selected_user});
     const new_notification = {
         title: conversation.subject,
         body: `${sender.name} ${mention ? "Mention you" : ""}: ${!file ? (messages[0]?.text) || "New message" : `New ${file}`}`
@@ -51,7 +53,6 @@ app.post("/chat/webhook*", (req, res) => {
 
 })
 const server = https.createServer(conf, app)
-// const server = http.createServer( app)
 server.listen(4015, () => { console.log("server run on port 4015") })
 
 
