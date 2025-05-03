@@ -36,9 +36,13 @@ app.post("/chat/webhook*", (req, res) => {
         const { subtype } = content[0]
         file = subtype
     }
-    const {participants}=conversation
-    const selected_user=participants[user_id]
-    console.log({selected_user});
+    const { participants } = conversation
+    const selected_user = participants[user_id]
+    if (selected_user) {
+        const { notify } = selected_user
+        if (!notify) return
+        if (notify === "MentionsOnly" && !mention) return
+    }
     const new_notification = {
         title: conversation.subject,
         body: `${sender.name} ${mention ? "Mention you" : ""}: ${!file ? (messages[0]?.text) || "New message" : `New ${file}`}`
