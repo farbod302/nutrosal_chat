@@ -30,6 +30,7 @@ app.post("/chat/webhook*", (req, res) => {
     if (messages_history[user_id] && messages_history[user_id] === id) return
     messages_history[user_id] = id
     const mention = messages[0]?.text.indexOf(`@${name}`) > -1
+    const to_all = messages[0]?.text.indexOf(`@all`) > -1
     const { content } = messages[0]
     let file = false
     if (content[0].type === "file") {
@@ -38,7 +39,7 @@ app.post("/chat/webhook*", (req, res) => {
     }
     const { participants } = conversation
     const selected_user = participants[user_id]
-    if (selected_user) {
+    if (selected_user && !to_all) {
         const { notify } = selected_user
         if (!notify) return
         if (notify === "MentionsOnly" && !mention) return
