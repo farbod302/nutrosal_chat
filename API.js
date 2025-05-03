@@ -78,6 +78,7 @@ const API = {
         app.post("/chat/upload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_file);
         app.post("/chat/videoUpload", multer({ dest: `${__dirname}/uploads` }).single("file"), this.upload_video);
         app.get("/chat/getUploadProgress/:upload_id", this.get_progress);
+        app.post("/chat/muteNotification", this.muteNotification);
     },
 
     get_progress(req, res) {
@@ -303,7 +304,7 @@ const API = {
                 if (res) res.json({ status: false, msg: "Bad request" });
                 return;
             }
-            const result = await API.server_request("PUT", `conversations/${group_id}/participants/${user_id}`, { notify: "MentionsOnly", access: "ReadWrite" });
+            const result = await API.server_request("PUT", `conversations/${group_id}/participants/${user_id}`, { notify: true, access: "ReadWrite" });
             if (res) res.json(result);
         } catch (err) {
             console.error("Error in addMemberToGroup:", err.message);
@@ -454,6 +455,16 @@ const API = {
             res.json(response)
         })
 
+
+    },
+    async muteNotification(req, res) {
+        try {
+            const { chat_id, user_id, new_status } = req.body
+            const result = await API.server_request("PUT", `conversations/${chat_id}/participants/${user_id}`, { notify: new_status, access: "ReadWrite" });
+            res.json(result)
+        } catch {
+            res.json(false)
+        }
 
     }
 }
