@@ -76,3 +76,72 @@ const send_notification = (notification_token, title, body, group_id) => {
     axios.post("https://api.expo.dev/v2/push/send", [notif])
 
 }
+
+
+const multer = require('multer');
+const fs = require('fs');
+const upload = multer({ dest: './uploads/' });
+const { createTransport } = require("nodemailer") // npm i nodemailer
+const config = {
+    host: "smtp.sendgrid.com",
+    port: 587,
+    auth: {
+        type: "login",
+        user: "nutrosal-noreply@nutrosal.com",
+        pass: process.env.EMAIL, // put it to .env
+    },
+}
+const miler = createTransport(config);
+
+
+
+
+app.post('/send-image', upload.single('files'), async (req, res) => {
+
+
+    const email = req.body.email;
+    const name = req.body.name;
+    const imageFile = req.file;
+    const code = req.code;
+    if (!email || !imageFile) {
+        return res.status(400).send('Missing email or image');
+    }
+    const mailOptions = {
+        from: 'nutrosal-noreply@nutrosal.com',
+        to: email,
+        subject: `Congradulations ${name}! Your Nutrosal Fat Loss Discount Code Is Here!`,
+        html: `
+        <p>Hi ${name}</p>
+        Thank you for stopping by our table at the event – it was great connecting with you!
+        <br />
+        <b>👉 CODE: ${code}</b>
+        <br />
+        <b>⏳ Offer expires in 30 days </b>
+        <br />
+        <b>✅ Valid for our 1-Month Plan only </b>
+        <br />
+        <br /> As promised, here’s your exclusive discount code for Nutrosal Fat Loss Services:<br /> <br /> 
+        <img src="cid:unique-image-id" alt="Embedded Image" /><br /> <br /> 
+        This is a great chance to kick-start your fat loss journey with a focused, results-driven plan.
+        Got questions or ready to book? Email to support@nutrosal.com or visit nutrosal.com to learn more.
+        <br />
+        – The Nutrosal Team
+      `,
+        attachments: [
+            {
+                filename: imageFile.originalname,
+                path: imageFile.path,
+                cid: 'unique-image-id',
+            },
+        ],
+    };
+
+    try {
+        await miler.sendMail(mailOptions)
+        fs.unlinkSync(imageFile.path);
+        res.send('Email sent successfully!');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error sending email.');
+    }
+});
