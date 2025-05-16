@@ -79,7 +79,6 @@ const send_notification = (notification_token, title, body, group_id) => {
 
 
 const multer = require('multer');
-const fs = require('fs');
 const upload = multer({ dest: './uploads/' });
 const { createTransport } = require("nodemailer") // npm i nodemailer
 const config = {
