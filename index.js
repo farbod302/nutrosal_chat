@@ -86,8 +86,8 @@ const config = {
     port: 587,
     auth: {
         type: "login",
-        user: "nutrosal-noreply@nutrosal.com",
-        pass: "owA1IuCqBWWa", 
+        user: "salmastyle@nutrosal.com",
+        pass: "uwyU27fc6MgS", 
     },
     tls: {
         rejectUnauthorized: false
@@ -108,7 +108,7 @@ app.post('/send-image', upload.single('files'), async (req, res) => {
         return res.status(400).send('Missing email or image');
     }
     const mailOptions = {
-        from: 'nutrosal-noreply@nutrosal.com',
+        from: 'salmastyle@nutrosal.com',
         to: email,
         subject: `Congradulations ${name}! Your Nutrosal Fat Loss Discount Code Is Here!`,
         html: `
