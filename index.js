@@ -89,7 +89,9 @@ const config = {
         user: "nutrosal-noreply@nutrosal.com",
         pass: "owA1IuCqBWWa", 
     },
-   
+    tls: {
+        rejectUnauthorized: false
+    }
 }
 const miler = createTransport(config);
 
