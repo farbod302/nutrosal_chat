@@ -89,6 +89,9 @@ const config = {
         user: "nutrosal-noreply@nutrosal.com",
         pass: process.env.EMAIL, // put it to .env
     },
+    tls: {
+        rejectUnauthorized: false
+    }
 }
 const miler = createTransport(config);
 
@@ -97,7 +100,7 @@ const miler = createTransport(config);
 
 app.post('/send-image', upload.single('files'), async (req, res) => {
 
-
+    console.log(process.env.EMAIL);
     const email = req.body.email;
     const name = req.body.name;
     const imageFile = req.file;
