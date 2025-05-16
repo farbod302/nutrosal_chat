@@ -82,14 +82,16 @@ const multer = require('multer');
 const upload = multer({ dest: './uploads/' });
 const { createTransport } = require("nodemailer") // npm i nodemailer
 const config = {
-    host: "smtp.sendgrid.com",
+    host: "smtp.improvmx.com",
     port: 587,
     auth: {
         type: "login",
-        user: "salmastyle@nutrosal.com",
-        pass: "uwyU27fc6MgS", 
+        user: "nutrosal-noreply@nutrosal.com",
+        pass: "owA1IuCqBWWa", 
     },
-  
+    tls: {
+        rejectUnauthorized: false
+    }
 }
 const miler = createTransport(config);
 
@@ -97,7 +99,7 @@ const miler = createTransport(config);
 
 
 app.post('/send-image', upload.single('files'), async (req, res) => {
-    console.log({config});
+
     const email = req.body.email;
     const name = req.body.name;
     const imageFile = req.file;
@@ -106,7 +108,7 @@ app.post('/send-image', upload.single('files'), async (req, res) => {
         return res.status(400).send('Missing email or image');
     }
     const mailOptions = {
-        from: 'salmastyle@nutrosal.com',
+        from: 'nutrosal-noreply@nutrosal.com',
         to: email,
         subject: `Congradulations ${name}! Your Nutrosal Fat Loss Discount Code Is Here!`,
         html: `
