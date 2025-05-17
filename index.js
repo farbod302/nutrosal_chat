@@ -101,7 +101,7 @@ app.post('/send-image', upload.single('files'), async (req, res) => {
     const email = req.body.email;
     const name = req.body.name;
     const imageFile = req.file;
-    const code = req.code;
+    const code = req.body.code;
     if (!email || !imageFile) {
         return res.status(400).send('Missing email or image');
     }
